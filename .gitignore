@@ -1,0 +1,12 @@
+.idea
+myEnv
+/db.sqlite3
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+media
+
+# Backup files #
+*.bak
