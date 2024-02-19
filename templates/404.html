@@ -1,0 +1,16 @@
+{% extends "base_panel.html"  %}
+{% load static %}
+{% block content %}
+
+    <div style="margin-top: 100px;" class="content">
+        <div class="section-inner clearfix text-center">
+            <img  src="{% static 'images/403.jpg' %}"
+                 class="img-fluid p-card-img rounded" style="width: 20%; height: 20%" alt="">
+        <h2 class="font-weight-lighter"><strong>Böyle bir sayfa yok karedeşim nerden çıktı bu?</strong></h2>
+        {% if request.user %}
+        <h3>Kullanıcı adınız: {{ request.user }}</h3>
+        {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

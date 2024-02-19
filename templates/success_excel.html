@@ -1,0 +1,20 @@
+{% extends "base_panel.html"  %}
+
+{% block content %}
+
+    <div class="content col-md-8 text-md-center">
+        <div class="section-inner clearfix">
+
+            <br>
+            <div>
+
+                <h3 class="alert-success">İşlem Başarılı</h3>
+                <h3 class="alert-primary">Eklenen Ürün sayısı: {{ info.created }} </h3>
+                <h3 class="alert-warning">Güncellenen Ürün sayısı: {{ info.updated}} </h3>
+            </div>
+
+            <p><a href="{% url 'core:products' %}">Ürünlere dönmek için Tıklayınız</a></p>
+        </div>
+    </div>
+
+{% endblock %}

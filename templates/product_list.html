@@ -1,0 +1,130 @@
+{% extends 'base_panel.html' %}
+
+{% block content %}
+
+
+    {#    <form style="margin-top: 50px;" action="{% url 'core:product-create' %}">#}
+    {#        <input type="submit" class="btn btn-primary btn-sm " value="Ürün Ekle"/>#}
+    {#    </form>#}
+
+    <table style="margin-top: 50px;" class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ürün Kodu</th>
+            <th scope="col">Baş Kodu</th>
+            <th scope="col">Kategori</th>
+            <th scope="col">Marka</th>
+            <th scope="col">Model</th>
+            <th scope="col">Açıklama</th>
+            <th scope="col">slug</th>
+            <th scope="col">İşlem</th>
+        </tr>
+        </thead>
+        <tbody>
+
+      {% for item in object_list %}
+         <tr>
+            <td>{{ item.pk }}</td>
+            <td>{{ item.item_code }}</td>
+            <td>{{ item.head_code }}</td>
+            <td>{{ item.model.brand.category.name }}</td>
+            <td>{{ item.model.brand.title }}</td>
+            <td>{{ item.model.title }}</td>
+            <td>{{ item.description }} </td>
+            <td>{{ item.slug }} </td>
+            <td>
+                <form action="{% url 'core:product-edit' slug=item.slug %}">
+                <input type="submit" class="btn btn-primary btn-sm" value="Düzenle"/>
+                </form>
+            </td>
+             <td>
+                 <form action="{% url 'core:product-delete' pk=item.pk %}">
+                     <input type="submit" class="btn btn-danger btn-sm" value="Sil"/>
+                 </form>
+             </td>
+             <td>
+                 <form action="{% url 'core:add-to-proposal-cart' slug=item.slug %}">
+                     <input type="submit" class="btn btn-info btn-sm" value="Teklife Ekle"/>
+                 </form>
+             </td>
+
+            </tr>
+        {% endfor %}
+
+    </table>
+
+    {% if is_paginated %}
+        <!--Pagination-->
+        <nav class="d-flex justify-content-center wow fadeIn" style="visibility: visible;">
+            <ul class="pagination pg-blue">
+                {% if page_obj.has_previous %}
+                    <!--Arrow left-->
+                    <li class="page-item ">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="page-item active">
+                    <a class="page-link" href="#">{{ page_obj.number }}
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                {#                    {% for i in page_obj.paginator.page_range %}#}
+                {#                        {% if page_obj.number == i %}#}
+                {#                            <li class="page-item active">#}
+                {#                                <a class="page-link" href="#">{{ i }}#}
+                {#                                    <span class="sr-only">(current)</span>#}
+                {#                                </a>#}
+                {#                            </li>#}
+                {#                        {% else %}#}
+                {#                            <li class="page-item">#}
+                {#                                <a class="page-link" href="?page={{ i }}">{{ i }}</a>#}
+                {#                            </li>#}
+                {#                        {% endif %}#}
+                {#                    {% endfor %}#}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <!--Pagination-->
+    {% endif %}
+
+    {#        {% if is_paginated %}#}
+    {#            <div class="pagination">#}
+    {#            <span class="page-links">#}
+    {#                {% if page_obj.has_previous %}#}
+    {#                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>#}
+    {#                {% endif %}#}
+    {#                <span class="page-current">#}
+    {#                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.#}
+    {#                </span>#}
+    {#                {% if page_obj.has_next %}#}
+    {#                    <a href="?page={{ page_obj.next_page_number }}">next</a>#}
+    {#                {% endif %}#}
+    {#            </span>#}
+    {#            </div>#}
+    {#        {% endif %}#}
+{% endblock content %}

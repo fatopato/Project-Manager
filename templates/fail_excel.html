@@ -1,0 +1,19 @@
+{% extends "base_panel.html"  %}
+
+{% block content %}
+
+    <div class="content col-md-8 text-md-center">
+        <div class="section-inner clearfix">
+
+            <br>
+            <div>
+
+                <h3 class="alert-danger">İşlem Başarısız</h3>
+                <h3 class="alert-danger">Excel Uygun Formatta Değil !</h3>
+            </div>
+
+            <p><a href="{% url 'core:products' %}">Ürünlere dönmek için Tıklayınız</a></p>
+        </div>
+    </div>
+
+{% endblock %}

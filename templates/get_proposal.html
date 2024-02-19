@@ -1,0 +1,17 @@
+{% extends 'my_base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div style="padding-top: 30px" class="container">
+<div style="width: 40%"class="mt-5 pt-4 ">
+    <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Teklif Al</button>
+  </form>
+  </div>
+  </div>
+
+  {% endblock %} 

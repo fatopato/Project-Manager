@@ -1,0 +1,105 @@
+{% load user_template_tags %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Homatex - Alışverişin güvenli hali</title>
+    <!-- Font Awesome -->
+    <link rel="preload" as="style" onload="this.rel='stylesheet'" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <!-- Material Design Bootstrap -->
+    <link href="{% static 'css/mdb.min.css' %}" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <!-- Your custom styles (optional) -->
+    <link href="{% static 'css/style.min.css' %}" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link rel="shortcut icon" href="#"/>
+    <style type="text/css">
+        html,
+        body,
+        header,
+        .carousel {
+            height: 60vh;
+        }
+
+        @media (max-width: 740px) {
+
+            html,
+            body,
+            header,
+            .carousel {
+                height: 100vh;
+            }
+        }
+
+        @media (min-width: 800px) and (max-width: 850px) {
+
+            html,
+            body,
+            header,
+            .carousel {
+                height: 100vh;
+            }
+        }
+
+    </style>
+</head>
+
+<body class="homepage-v3 hidden-sn white-skin animated">
+
+<nav class="mb-1 navbar fixed-top navbar-expand-lg navbar-dark primary-color">
+
+        <ul class="navbar-nav ml-auto nav-flex-icons">
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-335" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">{{ user.get_username }}
+                    <i class="fas fa-user"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-center dropdown-default"
+                     aria-labelledby="navbarDropdownMenuLink-335">
+                    <a class="dropdown-item" href="{% url 'core:logout' %}">Çıkış Yap</a>
+                </div>
+            </li>
+
+        </ul>
+
+        <ul>
+
+
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'core:login' %}">Giriş Yap <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+</nav>
+
+
+<!-- Navbar -->
+{% block content %}
+
+{% endblock content %}
+
+<!-- SCRIPTS -->
+<!-- JQuery -->
+<script type="text/javascript" rel="preload" as="script" rel="preload" as="script" src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" rel="preload" as="script" rel="preload" as="script" src="{% static 'js/popper.min.js' %}"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" rel="preload" as="script" rel="preload" as="script" src="{% static 'js/bootstrap.min.js' %}"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" rel="preload" as="script" rel="preload" as="script" src="{% static 'js/mdb.min.js' %}"></script>
+<!-- Initializations -->
+<script type="text/javascript" rel="preload" as="script" rel="preload" as="script">
+    // Animations initialization
+    new WOW().init();
+
+</script>
+</body>
+
+</html>

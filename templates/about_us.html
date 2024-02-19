@@ -1,0 +1,86 @@
+{% extends 'my_base.html' %}
+
+{% block content %}
+    <div style="margin-top: 80px; size: auto;" class="container-fluid align-content-center d-md-table col-md-5">
+       {{ about_us.text|linebreaks }}
+    </div>
+    <h4 class="font-weight-bold mt-4 dark-grey-text text-md-center"><strong>Partnerlerimiz</strong></h4>
+    <div class="container-fluid align-content-center d-md-table col-md-5">
+        <!-- Grid row -->
+        <div class="row pt-4">
+
+            <!-- Content -->
+            <div class="col-lg-12">
+                <!--Section: Products-->
+                <section>
+
+                    <!--Grid row-->
+                    <div class="row">
+                        <!--Grid column-->
+                        <div class="col-12">
+
+                            <!-- Grid row -->
+                            <div class="row">
+
+                                {% if brands %}
+                                    {% for i in brands %}
+                                        <!--Grid column-->
+                                        <div class="col-lg-3 col-md-12 mb-3">
+
+                                            <!--Card-->
+                                            <div class="card card-ecommerce hoverable">
+
+                                                <!--Card image-->
+                                                <div class="view overlay">
+                                                    <div >
+                                                        {% if i.image %}
+                                                            <img style="width:100%;height:160px;"  src="{{ i.image.url }}" class="img-fluid img-thumbnail" alt="{{ i.title }}">
+                                                        {% else %}
+                                                            <img src="https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132484366.jpg" class="img-fluid img-thumbnail" alt="{{ i.title }}">
+                                                        {% endif %}
+                                                    </div>
+                                                    <a href="{% url 'core:brand' slug=i.slug %}">
+                                                        <div class="mask rgba-white-slight waves-effect waves-light"></div>
+                                                    </a>
+                                                </div>
+                                                <!--Card image-->
+
+                                                <!--Card content-->
+                                                <div class="card-body">
+                                                    <!--Category & Title-->
+
+                                                    <h5 class="card-title mb-1"><strong><a href="{% url 'core:brand' slug=i.slug %}" class="dark-grey-text text-center">{{ i.title }}</a></strong></h5>
+
+                                                </div>
+                                                <!--Card content-->
+
+                                            </div>
+                                            <!--Card-->
+
+                                        </div>
+                                        <!--Grid column-->
+
+                                        {% if forloop.counter|divisibleby:4 %}
+                                            </div>
+                                            <div class="row">
+                                        {% endif %}
+                                    {% endfor %}
+
+
+                                </div>
+                                    <!--Grid row-->
+
+
+
+                                    </div>
+
+                                    </div>
+                                    <!--Grid row-->
+
+                                    </section>
+                                    <!--Section: Products-->
+                                    </div>
+                                {% endif %}
+        </div>
+    </div>
+{% endblock content %}

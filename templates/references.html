@@ -1,0 +1,21 @@
+{% extends 'my_base.html' %}
+
+{% block content %}
+    <div class="container tugce">
+        {% if references %}
+        <div style="display:flex; flex-wrap:wrap; align-items: center; justify-content: center;">
+              {% for reference in references %}
+            <div class="referencebox"
+                 style="display:block; margin:15px 15px 15px 15px; padding:15px 15px 15px 15px; box-sizing:border-box; width:177px;">
+                {% if reference.image %}
+                <div align="center"><img src="{{ reference.image.url }}" alt="{{ reference.title }}"
+                                         style="vertical-align:text-top;" width="147" height="100">
+                {% endif %}
+                    <div class="norm_text_link pad510" style="height:40px;" align="center">{{ reference.title }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

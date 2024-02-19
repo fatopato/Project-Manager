@@ -1,0 +1,85 @@
+{% extends 'my_base.html' %}
+
+{% block content %}
+
+    <table style="margin-top: 50px;" class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Katalog</th>
+            <th scope="col">Aç</th>
+            <th scope="col">İndir</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for catalog in object_list %}
+            <tr>
+                <td>{{ catalog.pk }}</td>
+                <td>{{ catalog.title }}</td>
+                <td>
+                    <form action="{% url 'core:show-catalog' pk=catalog.pk  %}">
+                        <input type="submit" class="btn btn-primary btn-sm" value="Aç"/>
+                    </form>
+                </td>
+                <td>
+                    <a class="btn btn-success btn-sm" href="{{catalog.pdf.url}}" download> İndir </a>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+    {% if is_paginated %}
+        <!--Pagination-->
+        <nav class="d-flex justify-content-center wow fadeIn" style="visibility: visible;">
+            <ul class="pagination pg-blue">
+                {% if page_obj.has_previous %}
+                    <!--Arrow left-->
+                    <li class="page-item ">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% for i in page_obj.paginator.page_range %}
+                    {% if page_obj.number == i %}
+                        <li class="page-item active">
+                            <a class="page-link" href="#">{{ i }}
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <!--Pagination-->
+    {% endif %}
+{% endblock content %}

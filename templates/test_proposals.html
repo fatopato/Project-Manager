@@ -1,0 +1,233 @@
+
+    {% extends 'base_panel.html' %}
+
+    {% block content %}
+      <!-- Material inline form -->
+            <form style="margin-top: 50px;" class="form-inline" method="get">
+
+                <select name="ordering" class="custom-select custom-select-sm">
+                  <option selected value="-created_at">Teklifleri Sırala</option>
+                  <option value="-created_at">Yeniden Eskiye</option>
+                  <option value="created_at">Eskiden Yeniye</option>
+                  <option value="-name">İsme Göre Azalan</option>
+                  <option value="name">İsme Göre Artan</option>
+                  <option value="-mail">Mail'e Göre Azalan</option>
+                  <option value="mail">Mail'e Göre Artan</option>
+                </select>
+
+                <!--
+                  <select name="page_size" class="custom-select custom-select-sm">
+                  <option selected value="10">Sayfadaki Teklif Sayısı</option>
+                  <option value="2">2</option>
+                  <option value="4">4</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                </select>
+
+                 -->
+
+
+              <button type="submit" class="btn btn-primary btn-sm">Sırala</button>
+            </form>
+    <table id="_refreshable" class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Teklif Zamanı</th>
+          <th scope="col">Teklifi Alan</th>
+          <th scope="col">Mail</th>
+          <!--<th scope="col">Ürün</th>
+          <th scope="col">Ürün Kodu</th>-->
+          <th scope="col">Durum</th>
+          <th scope="col">İşlem</th>
+          <!-- <th scope="col">Teklif Gönderen</th> -->
+        </tr>
+      </thead>
+      <tbody>
+
+      {% for proposal in proposals %}
+         <tr>
+            <td >{{ proposal.pk }}</td>
+            <td >{{ proposal.created_at }}</td>
+            <td>{{ proposal.name }}</td>
+            <td>{{ proposal.mail }}</td>
+            <!--<td>[
+            {% for item in proposal.items.all %}
+            {{ item.title }},  
+            {% endfor %}
+            ]
+            </td>
+            
+            <td>[
+            {% for item in proposal.items.all %}
+            {{ item.item_code }},  
+            {% endfor %}
+            ]
+            </td>-->
+            {% if proposal.is_responded  %}
+            <td title="{{ proposal.responded_by }} tarafından {{ proposal.responded_at }} tarihinde gönderildi">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="materialChecked" checked="" disabled="">
+                </div>
+            </td>
+              {% if user.get_username == proposal.responded_by.get_username %}
+            <td title="{{ proposal.responded_by }} tarafından {{ proposal.responded_at }} tarihinde gönderildi">
+              <a href="{% url 'core:proposal-detail' pk=proposal.pk %}"><button type="button" class="btn btn-default btn-sm">Düzenle</button></a>
+            </td>
+              {% else %}
+            <td title="{{ proposal.responded_by }} tarafından {{ proposal.responded_at }} tarihinde gönderildi">
+              <button type="button" class="btn btn-primary btn-sm disabled">Gönderildi</button>
+            </td>  
+            {% endif %}
+            <!-- <td>{{ proposal.responded_by }}</td> -->
+            {% else %}
+             <td>
+             <div class="form-check">
+                  <input type="checkbox" class="form-check-input disabled" id="materialUnchecked">
+                </div>
+             </td>
+
+             <td><a href="{% url 'core:proposal-detail' pk=proposal.pk %}"><button type="button" class="btn btn-primary btn-sm">Teklife Git</button></a></td> 
+            {% endif %}
+
+          <!--
+            <td><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#teklifGonderForm{{proposal.pk}}">Teklif Gönder</button></td>
+            <div class="modal fade" id="teklifGonderForm{{proposal.pk}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold"> Teklif Maili</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        <div class="modal-body mx-2">
+         <form action="" method="post" enctype="multipart/form-data">
+             {% csrf_token %}
+
+             <div class="md-form mb-2">
+              <i class="fas fa-address-card prefix grey-text"></i>
+              <input type="text" id="form24" name="pk" class="form-control validate disabled" value="{{ proposal.pk }}">
+              <label data-error="wrong" data-success="right" for="form24">Teklif Numarası</label>
+            </div>
+            <div class="md-form mb-2">
+              <i class="fas fa-user prefix grey-text"></i>
+              <input type="text" id="form34" name="name" class="form-control validate disabled" value="{{ proposal.name }}">
+              <label data-error="wrong" data-success="right" for="form34">Teklif Alan</label>
+            </div>
+
+            <div class="md-form mb-2">
+              <i class="fas fa-envelope prefix grey-text"></i>
+              <input type="email" name="mail" id="form29" class="form-control validate disabled", value="{{ proposal.mail }}">
+              <label data-error="wrong" data-success="right" for="form29">Mail Adresi</label>
+            </div>
+
+            <div class="md-form mb-2">
+              <i class="fas fa-tag prefix grey-text"></i>
+              <input type="text" name="subject" id="form32" class="form-control validate" value="Homatex Fiyat Teklifi: ">
+              <label data-error="wrong" data-success="right" for="form32">Konu</label>
+            </div>
+
+             {% for item in proposal.items.all %}
+             <div style="margin:5px" class="row">
+               <div style="margin-left:20px" class="md-form mb-1">
+                  <input type="number" step="0.01" name="price_{{ item.pk }}" id="form321{{ item.pk }}" class="form-control validate" value="Homatex Fiyat Teklifi: {{ proposal.item.title }}">
+                  <label data-error="wrong" data-success="right" for="form321{{ item.pk }}">{{ item.item_code }} Fiyat</label>
+                </div>
+                <br>
+             <div style="margin-left:20px" class="md-form mb-1">
+              <input type="number" step="0.01" name="discount_{{ item.pk }}" id="form322{{ item.pk }}" class="form-control validate" value="Homatex Fiyat Teklifi: {{ proposal.item.title }}">
+              <label data-error="wrong" data-success="right" for="form322{{ item.pk }}">{{ item.item_code }} İndirim Oranı(%)</label>
+            </div>
+             </div>
+            {% endfor %}
+            <div class="form-group">
+            <label for="file">Teklif Dosyası</label>
+            <input type="file" name="file" id="file">
+            </div>
+
+             <div class="modal-footer d-flex justify-content-center">
+                  <button class="btn btn-unique" type="submit" value="Submit">Gönder</button>
+             </div>
+        </form>
+        </div>            
+         
+      </div>
+    </div>
+    </div>
+     -->
+        </tr>
+       {% endfor %}
+       </tbody>
+    </table>
+
+
+
+
+  {% if proposals.has_other_pages %}
+     <!--Pagination-->
+  <nav class="d-flex justify-content-center wow fadeIn">   
+  <ul class="pagination pg-blue">
+    {% if proposals.has_previous %}
+      <!--Arrow left-->
+          <li class="page-item ">
+            <a class="page-link" href="?page={{ proposals.previous_page_number }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </li>
+    {% else %}
+      <li class="page-item disabled">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Previous</span>
+      </a>
+      </li>
+    {% endif %}
+    {% for i in proposals.paginator.page_range %}
+      {% if proposals.number == i %}
+        <li class="page-item active">
+            <a class="page-link" href="#">{{ i }}
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+      {% else %}
+      <li class="page-item">
+            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+      </li>
+      {% endif %}
+    {% endfor %}
+    {% if proposals.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ proposals.next_page_number }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+          <span class="sr-only">Next</span>
+        </a>
+      </li>
+    {% else %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+          <span class="sr-only">Next</span>
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+  </nav>
+<!--Pagination-->
+  {% endif %}
+
+  <!--
+    <script>
+        window.setTimeout(function () {
+            location.href = "{% url 'core:proposals' %}";
+        }, 60*1000); // refresh/redirect after 60 seconds
+    </script>
+    -->
+    {% endblock content %}
+
+
+

@@ -1,0 +1,183 @@
+{% extends 'base_panel.html' %}
+
+{% block content %}
+
+    </div class="container">
+    {% if not isSellerProposal %}
+        <table style="padding-left:50px; margin-top: 50px;" id="_refreshable"
+               class="table table-hover table-sm table-bordered table-responsive p-2">
+            <tr>
+                <th scope="col">Teklif No</th>
+                <th scope="col">Teklif Zamanı</th>
+                <th scope="col">İsim</th>
+                <th scope="col">Mail</th>
+                <th scope="col">Telefon</th>
+            <tr>
+            <tr>
+                <th scope="col">{{ proposal.pk }}</th>
+                <th scope="col">{{ proposal.created_at }}</th>
+                <th scope="col">{{ proposal.name }}</th>
+                <th scope="col">{{ proposal.mail }}</th>
+                <th scope="col">{{ proposal.phone }}</th>
+            <tr>
+        </table>
+    {% endif %}
+    </div>
+    <form method="post" class="text-center border border-light p-5" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table id="_refreshable" class="table table-hover table-responsive">
+            <thead>
+            <tr>
+                <th scope="col">Görsel</th>
+                <th scope="col">Ürün Kodu</th>
+                <th scope="col">Ürün</th>
+                <th scope="col">Miktar</th>
+                <th scope="col">Birim Fiyatı</th>
+                <th scope="col">İndirim(%)</th>
+                <th scope="col">KDV(%)</th>
+                <th scope="col">İndirimli Fiyatı(KDV Dahil)</th>
+                {% if isSellerProposal %}
+                <th scope="col">Sil</th>
+                {% endif %}
+                <!-- <th scope="col">Teklif Gönderen</th> -->
+            </tr>
+            </thead>
+            <tbody>
+
+            <!--{% for item in proposal.items.all %}
+              {{ item.title }},  
+            {% endfor %}-->
+
+            {% for item in proposal.items.all %}
+                <tr>
+                    <td style="width:40px; height:40px;text-align:center; vertical-align:middle">
+                        {% if item.item.image %}
+                            <img src="{{ item.item.image.url }}" class="img-fluid img-thumbnail"
+                                 alt="{{ item.item.title }}">
+                        {% else %}
+                            <img src="https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132484366.jpg"
+                                 class="img-fluid img-thumbnail" alt="{{ order_item.item.title }}">
+                        {% endif %}
+                    </td>
+                    <td>{{ item.item.item_code }}</td>
+                    <td>{{ item.item.title }}</td>
+                    <td>
+                        <input onchange="calculate({{ item.item.pk }})" style="width:100px" type="number" name="quantity_{{ item.item.pk }}"
+                               id="quantity_{{ item.item.pk }}"
+                               class="form-control validate" required value="{{ item.quantity }}">
+                    </td>
+                    <td><input onchange="calculate({{ item.item.pk }})" style="width:100px" type="number" step="0.01"
+                               name="price_{{ item.item.pk }}" id="price_{{ item.item.pk }}"
+                               class="form-control validate"
+                               required
+                            {% if proposal.is_responded %}
+                               value="{{ item.price }}"
+                            {% else %}
+                               value="{{ item.item.price }}"
+                            {% endif %}
+
+                               min="0" onkeypress="return event.keyCode !== 13;"
+                    >
+                    </td>
+                    <td><input onchange="calculate({{ item.item.pk }})" style="width:80px" type="number" step="0.01"
+                               name="discount_{{ item.item.pk }}" id="discount_{{ item.item.pk }}"
+                               class="form-control validate"
+                               required
+                            {% if proposal.is_responded %}
+                               value="{{ item.discount_rate }}"
+                            {% else %}
+                               value="{{ item.item.discount }}"
+                            {% endif %}
+                               max="100" onkeypress="return event.keyCode !== 13;"
+                    ></td>
+                    <td><input onchange="calculate({{ item.item.pk }})" style="width:80px" type="number" step="0.01"
+                               name="kdv_{{ item.item.pk }}" id="kdv_{{ item.item.pk }}"
+                               class="form-control validate disabled"
+                               required value="{{ item.kdv }}" min=0></td>
+                    <td id="final_price_{{ item.item.pk }}">
+                        {% if item.final_price %}
+                            {{ item.final_price }}
+                        {% endif %}
+                    </td>
+                    {% if isSellerProposal %}
+                        <td>
+                            <a style='color: red;' href="{% url 'core:remove-from-proposal-cart' item.item.slug %}">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    {% endif %}
+                    <td id="final_x_price_{{ item.item.pk }}" style="visibility: hidden">
+                        {% if item.final_price %}
+                            {{ item.final_price }}
+                        {% endif %}
+                    </td>
+                    <td><input style="visibility: hidden"
+                               name="currency_{{ item.item.pk }}" id="currency_{{ item.item.pk }}"
+                            {% if item.item.curency %}
+                               value="{{ item.item.curency }}"
+                            {% else %}
+                               value="TL"
+                            {% endif %}></td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><strong>Toplam</strong></td>
+                <td class="text-dark" id="total_price"><strong>0</strong></td>
+            </tr>
+            </tbody>
+        </table>
+        <td>
+            <input style="width:100px" type="text" name="download" id="download"
+                   class="form-control validate disabled" required value="indir" hidden>
+        </td>
+        <div class="text-left">
+            <button class="btn btn-primary" type="submit" value="Submit">Excel İndir</button>
+        </div>
+    </form>
+    <script>
+        window.onload = function () {
+            calculateAll();
+        };
+
+        function calculate(i) {
+            var quantity = parseInt(document.getElementById('quantity_' + i).value);
+            var price = parseFloat(document.getElementById('price_' + i).value);
+            var discount_rate = parseFloat(document.getElementById('discount_' + i).value);
+            var kdv = parseFloat(document.getElementById('kdv_' + i).value);
+            var finalPrice = parseFloat(((quantity * price * (1 - discount_rate / 100)) * (1 + kdv / 100)).toFixed(2));
+            if (!isNaN(finalPrice)) {
+                document.getElementById('final_price_' + i).innerHTML = finalPrice.toLocaleString();
+                document.getElementById('final_x_price_' + i).innerHTML = finalPrice;
+                console.log("Product: ", i, ". Quantity: ", quantity, ". Price: ", price, ". Discount: ", discount_rate, ". KDV: ", kdv, ". FinalPrice: ", finalPrice.toLocaleString());
+                calculateAll();
+            }
+        }
+
+        function calculateAll() {
+            var prices = document.querySelectorAll('[id^="final_x_price_"]');
+            var total = parseFloat("0.0");
+            console.log(prices)
+            for (let i = 0; i < prices.length; i++) {
+                console.log(prices[i].innerHTML.toString());
+                var num = parseFloat(prices[i].innerHTML.toString().replace(",", "."));
+                if (isNaN(num)) {
+                    prices[i].classList.add("btn-danger");
+                } else {
+                    console.log("num", num);
+                    total += num;
+                    console.log("tot", total);
+                    prices[i].classList.remove("btn-danger");
+                }
+            }
+            console.log("all: ", total)
+            document.getElementById('total_price').innerHTML = total.toLocaleString();
+        }
+    </script>
+
+{% endblock content %}

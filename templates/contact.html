@@ -1,0 +1,62 @@
+{% extends 'my_base.html' %}
+
+{% block content %}
+    <div style="margin-top: 80px; size: auto;" class="container-fluid align-content-center d-md-table col-md-5">
+        <table style="margin-top: 50px;" class="table table-hover">
+            <tbody>
+
+            <tr>
+                <td>Firma Adı</td>
+                <td>{{ contact_info.name }}</td>
+            </tr>
+            <tr>
+                <td>Firma Resmi Adı</td>
+                <td>{{ contact_info.official_name }}</td>
+            </tr>
+            <tr>
+                <td>Telefon</td>
+                <td>{{ contact_info.phone }}</td>
+            </tr>
+            <tr>
+                <td>Fax</td>
+                <td>{{ contact_info.fax }}</td>
+            </tr>
+            <tr>
+                <td>E-mail</td>
+                <td>{{ contact_info.mail }}</td>
+            </tr>
+            <tr>
+                <td>Adres</td>
+                <td>{{ contact_info.address }}</td>
+            </tr>
+            <tr>
+                <td>Vergi Dairesi</td>
+                <td>{{ contact_info.tax_official }}</td>
+            </tr>
+
+        </table>
+
+        <div class="mapouter align-content-center">
+            <div class="gmap_canvas">
+                <iframe id="gmap_canvas"
+                        src="https://maps.google.com/maps?q=homatex&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0"
+                        scrolling="no" marginheight="0" marginwidth="0"></iframe>
+                <a href=""></a><br>
+                <style>.mapouter {
+                    position: relative;
+                    text-align: center;
+                    height: auto;
+                    width: auto;
+                }</style>
+{#                <a href="https://www.embedgooglemap.net">embed google</a>#}
+                <style>.gmap_canvas {
+                    overflow: hidden;
+                    background: none !important;
+                    {#height: auto;#}
+                    {#width: auto;#}
+                }</style>
+            </div>
+        </div>
+
+    </div>
+{% endblock content %}

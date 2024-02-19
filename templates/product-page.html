@@ -1,0 +1,311 @@
+
+{% extends 'my_base.html' %}
+{% load static %}
+{% block content %}
+
+  <!--Main layout-->
+  <main class="mt-5 pt-4">
+    <div class="container dark-grey-text mt-5">
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-6 mb-4 view zoom overlay rounded">
+          {% if item.image %}
+          <img style="width:350px;height:300px;" src={{item.image.url}} class="img-fluid" alt="">
+          {% elif item.image_address and item.is_image_exist %}
+              <img src="{% static item.get_image_address_url %}"
+                   class="img-fluid p-card-img" alt="">
+          {% else %}
+          <img style="width:350px;height:300px;" src="{% static 'images/no_image.jpeg' %}" class="img-fluid" alt="">
+          {% endif %}
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+
+          <!--Content-->
+          <div class="p-4">
+
+            <div class="mb-3">
+              <a href="{{ item.category.get_category_detail_url }}">
+                <span class="badge purple mr-1">{{item.category}}</span>
+              </a>
+            </div>
+
+            <!--
+            <p class="lead">
+              {% if item.is_price_visible %}
+                {% if item.is_discounted %}
+                <span class="mr-1">
+                <del>{{item.discount_price}}</del>
+                </span>
+                {% endif %}
+                <span>${{item.price}}</span>
+              {% else %}
+                <span>Teklif Al</span>
+              {% endif %}-->
+            <p class="lead">
+              <span>{{item.item_code}}</span>
+            </p>
+
+            <p class="lead font-weight-bold">{{item.title}}</p>
+
+            <p>Katalog Kodu: {{ item.catalog_code }}</p>
+
+
+              <a class="btn btn-default" href="{{ item.get_add_to_cart_url }}" aria-controls="sepete-ekle">
+              Sepete Ekle
+
+                <i class="fas fa-shopping-cart ml-1"></i>
+              </a>
+            <!--
+
+            <a class="btn btn-primary" data-toggle="collapse" href="#teklif_al" aria-expanded="false" aria-controls="teklif_al">
+              Teklif Al
+              </a>
+          <div class="collapse" id="teklif_al">
+          <div style="width: 40%"class="mt-2 pt-4 ">
+            {% load crispy_forms_tags %}
+
+            <form method="post">
+              {% csrf_token %}
+              {{ form|crispy }}
+              <button type="submit" class="btn btn-primary">Tamamla</button>
+            </form>
+          </div>
+          </div>
+
+          </div>
+
+            -->
+          <!--Content-->
+
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+      <hr>
+      </div>
+{#      <!--Grid row-->#}
+{#      <div class="row d-flex justify-content-center wow fadeIn">#}
+{##}
+{#        <!--Grid column-->#}
+{#        <div class="col-md-6 text-center">#}
+{##}
+{#          <h4 class="my-4 h4">Ürün Açıklaması</h4>#}
+{##}
+{#          <p>{{item.description|linebreaks}}</p>#}
+{##}
+{#        </div>#}
+{#        <!--Grid column-->#}
+{##}
+{#      </div>#}
+{#      <!--Grid row-->#}
+
+{#      <!--Grid row-->#}
+{#      <div class="row wow fadeIn">#}
+{##}
+{#        <!--Grid column-->#}
+{#        <div class="col-lg-4 col-md-12 mb-4">#}
+{##}
+{#          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/11.jpg" class="img-fluid" alt="">#}
+{##}
+{#        </div>#}
+{#        <!--Grid column-->#}
+{##}
+{#        <!--Grid column-->#}
+{#        <div class="col-lg-4 col-md-6 mb-4">#}
+{##}
+{#          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/12.jpg" class="img-fluid" alt="">#}
+{##}
+{#        </div>#}
+{#        <!--Grid column-->#}
+{##}
+{#        <!--Grid column-->#}
+{#        <div class="col-lg-4 col-md-6 mb-4">#}
+{##}
+{#          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/13.jpg" class="img-fluid" alt="">#}
+{##}
+{#        </div>#}
+{#        <!--Grid column-->#}
+{##}
+{#      </div>#}
+{#      <!--Grid row-->#}
+
+
+        <!-- Classic tabs -->
+        <div class="classic-tabs border rounded px-4 pt-1">
+
+            <ul class="nav tabs-primary nav-justified table-striped" id="advancedTab" role="tablist">
+                <li class="nav-item border-right border-bottom">
+                    <a class="nav-link active show font-weight-bold btn-outline-indigo" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">
+                         Açıklama <i class="far fa-sticky-note"></i></a>
+                </li>
+                <li class="nav-item border-bottom">
+                    <a class="nav-link btn-outline-indigo font-weight-bold" id="info-tab" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="false">
+                        Bilgiler
+                        <i class="fas fa-info-circle"></i></a>
+                </li>
+            </ul>
+            <div class="tab-content" id="advancedTabContent">
+                <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                    <h5 class="mt-3">Ürün Açıklaması</h5>
+                    <p class="small text-muted text-uppercase mb-2">{{ item.title }}</p>
+                    <p class="pt-1">{{item.description|linebreaks}}</p>
+                </div>
+                <div class="tab-pane fade" id="info" role="tabpanel" aria-labelledby="info-tab">
+                    <h5 class="mt-3">Diğer Bilgiler</h5>
+                    <table class="table table-striped table-bordered mt-3">
+                        <tbody>
+                        {% if item.box_amount  %}
+                            <tr>
+                                <th scope="row" class="w-150 dark-grey-text h6">Koli Adedi</th>
+                                <td><em>{{ item.box_amount}}</em></td>
+                            </tr>
+                        {% endif %}
+                        {% if item.pallet_amount  %}
+                            <tr>
+                                <th scope="row" class="w-150 dark-grey-text h6">Palet Adedi</th>
+                                <td><em>{{ item.pallet_amount}}</em></td>
+                            </tr>
+                        {% endif %}
+                        {% if item.size and item.size != 'nan'  %}
+                            <tr>
+                                <th scope="row" class="w-150 dark-grey-text h6">Ürün Boyutları</th>
+                                <td><em>{{ item.size}}</em></td>
+                            </tr>
+                        {% endif %}
+                        {% if item.height and item.height != 'nan'  %}
+                            <tr>
+                                <th scope="row" class="w-150 dark-grey-text h6">Yükseklik</th>
+                                <td><em>{{ item.height}}</em></td>
+                            </tr>
+                        {% endif %}
+                        {% if item.volume and item.volume != 'nan'  %}
+                            <tr>
+                                <th scope="row" class="w-150 dark-grey-text h6">Hacim</th>
+                                <td><em>{{ item.volume}}</em></td>
+                            </tr>
+                        {% endif %}
+                        {% if item.width and item.width != 'nan'  %}
+                            <tr>
+                                <th scope="row" class="w-150 dark-grey-text h6">Genişlik</th>
+                                <td><em>{{ item.width}}</em></td>
+                            </tr>
+                        {% endif %}
+                        {% if item.weight and item.weight != 'nan'  %}
+                            <tr>
+                                <th scope="row" class="w-150 dark-grey-text h6">Ağırlık</th>
+                                <td><em>{{ item.weight}}</em></td>
+                            </tr>
+                        {% endif %}
+                        {% if item.power and item.power != 'nan'  %}
+                            <tr>
+                                <th scope="row" class="w-150 dark-grey-text h6">Güç</th>
+                                <td><em>{{ item.power}}</em></td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <!-- Classic tabs -->
+
+
+        <!-- Section: Last items -->
+        <section>
+
+            <h4 class="font-weight-bold mt-4 dark-grey-text text-md-center"><strong>BENZER ÜRÜNLER</strong></h4>
+            <hr class="mb-5">
+
+            <!-- Grid row -->
+            <div class="row">
+
+                {% for item in related_items %}
+                    <!--Grid column-->
+                    <div class="h-25 col-lg-3 col-md-6 mb-4">
+
+                        <!--Card-->
+                        <div class="card card-ecommerce view zoom overlay rounded">
+
+                            <!--Card image-->
+                            <div class="view overlay" style="width: 100%; height: 200px;">
+                                {% if item.image %}
+                                    <img src="{{ item.image.url }}"
+                                         class="img-fluid p-card-img" alt="" style="vertical-align: middle;">
+                                {% elif item.image_address and item.is_image_exist %}
+                                    <img src="{% static item.get_image_address_url %}"
+                                         class="img-fluid p-card-img" alt="">
+                                {% else %}
+                                    <img src="{% static 'images/no_image.jpeg' %}"
+                                         class="img-fluid p-card-img" alt="">
+                                {% endif %}
+                                <a href="{% url 'core:product' slug=item.slug %}">
+                                    <div class="mask rgba-white-slight waves-effect waves-light"></div>
+                                </a>
+                            </div>
+                            <!--Card image-->
+
+                            <!--Card content-->
+                            <div class="card-body">
+                                <!--Category & Title-->
+
+                                {#                                        <p class="card-title mb-1 p-small"><strong><a href="{% url 'core:brand' slug=item.model.brand.slug %}"#}
+                                {#                                                                                      class="dark-grey-text">{{ item.model.brand.title|upper }}</a></strong>#}
+                                <p class="card-title mb-1 p-small"><strong><a
+                                        class="dark-grey-text">{{ item.model.brand.title|upper }}</a></strong>
+                                </p>
+                                <p class=" p-smaller"  title="{{ item.title }}">
+                                    <a href="{% url 'core:product' slug=item.slug %}"
+                                       class="dark-grey-text">{{ item.title }}</a>
+                                </p>
+
+{#                                <span class="badge badge-danger mb-2"><a#}
+{#                                        href="{% url 'core:product' slug=item.slug %}"></a>yeni ürün</span>#}
+                                <span class="badge badge-primary mb-2"><a
+                                        href="{% url 'core:product' slug=item.slug %}"></a>Ürün kodu: {{ item.item_code}}</span>
+                                {#                                        <!-- Price -->#}
+                                {#                                        <h6 class="h6-responsive font-weight-bold dark-grey-text"><strong>$749</strong> <span class="grey-text"><small><s>$889</s></small></span></h6>#}
+                                {#                                        <!--Card footer-->#}
+                                {#                                        <div class="card-footer pb-0">#}
+                                {#                                            <a class="btn btn-default" href="{{ item.get_add_to_cart_url }}"#}
+                                {#                                               aria-controls="sepete-ekle">#}
+                                {#                                                Sepete Ekle#}
+                                {##}
+                                {#                                                <i class="fas fa-shopping-cart ml-1"></i>#}
+                                {#                                            </a>#}
+                                {#                                        </div>#}
+
+                            </div>
+                            <!--Card content-->
+
+                        </div>
+                        <!--Card-->
+
+                    </div>
+                    <!--Grid column-->
+                {% endfor %}
+            </div>
+            <!--Grid row-->
+        </section>
+        <!-- /.Section: Last items -->
+
+    </div>
+  </main>
+  <!--Main layout-->
+
+
+
+
+
+{% endblock content %}
+
+

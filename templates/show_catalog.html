@@ -1,0 +1,14 @@
+{% extends 'my_base.html' %}
+
+{% block content %}
+    {#    <div class="container-fluid">#}
+    {#        <embed src="{{ catalog.pdf.url }}" type="application/pdf">#}
+    {#    </div>#}
+    <div class='embed-responsive' style='padding-bottom:150%; margin-top: 70px;'>
+        <object data='{{ catalog.pdf.url }}' type='application/pdf' width='100%' height='100%'>
+            <p>Cihazını PDF formatını desteklemiyor</p>
+            <p><a href="{{ catalog.pdf.url }}">Dilerseniz indirebilirsiniz</a></p>
+        </object>
+    </div>
+
+{% endblock content %}

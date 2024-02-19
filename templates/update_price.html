@@ -1,0 +1,37 @@
+{% extends "base_panel.html"  %}
+
+{% block content %}
+
+    <div class="content col-md-8 text-md-center">
+        <div class="section-inner clearfix">
+
+            <br>
+            <div>
+
+                <h3 class="alert-success">İşlem Başarılı</h3>
+                <h3 class="alert-primary">Güncellenen Ürün sayısı: {{ info.updated }} </h3>
+                <h3 class="alert-warning">Sistemde olmayan ürünler: </h3>
+                <table style="margin-top: 50px;" class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Ürün Kodu</th>
+                        <th scope="col">Baş Kodu</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for i in info.failed %}
+                        <tr>
+                            <td>{{ i.item_code}}</td>
+                            <td>{{ i.head_code}}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <p><a href="{% url 'core:products' %}">Ürünlere dönmek için Tıklayınız</a></p>
+        </div>
+    </div>
+
+{% endblock %}

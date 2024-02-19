@@ -1,0 +1,25 @@
+{% extends 'base_panel.html' %}
+{% block content %}
+
+    {% load widget_tweaks %}
+
+    <div class="container" style="width:50%; margin-top: 80px;">
+
+
+        {% if item.title %}
+            <h2>Ürün Değiştir</h2>
+        {% else %}
+            <h2>Ürün Ekle</h2>
+        {% endif %}
+
+        {% load crispy_forms_tags %}
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">Tamamla</button>
+        </form>
+    </div>
+
+
+{% endblock %}

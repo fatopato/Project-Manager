@@ -1,0 +1,144 @@
+{% extends "my_base.html" %}
+
+{% block content %}
+  <main>
+    <div style="padding-top:100px" class="container">
+
+    <div class="table-responsive-sm ">
+    <h2>Talep Özeti</h2>
+    <form action="" method="post" enctype="multipart/form-data">
+    <table class="table">
+        {%csrf_token%}
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Resmi</th>
+            <th scope="col">Ürün Kodu</th>
+            <th scope="col">Ürün Başlığı</th>
+            <th scope="col">Talep Adedi</th>
+            <!--<th scope="col">Talep Miktarı</th>-->
+            <!--
+            <th scope="col">Fiyat</th>
+            <th scope="col">Miktar</th>
+            <th scope="col">Toplam Fiyat</th>
+            -->
+
+        </tr>
+        </thead>
+        <tbody>
+        {% if object.items %}
+        {% for order_item in object.items.all %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td style="width:40px; height:40px;text-align:center; vertical-align:middle">
+                  {% if order_item.item.image %}
+                  <img src="{{ order_item.item.image.url }}" class="img-fluid img-thumbnail" alt="{{ order_item.item.title }}">
+                  {% else %}
+                  <img src="https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132484366.jpg" class="img-fluid img-thumbnail" alt="{{ order_item.item.title }}">
+                  {% endif %}
+            <td>{{ order_item.item.item_code }}</td>
+            <td>{{ order_item.item.title }}</td>
+            <!--<td style="color:gray">12</td>-->
+            <td>
+                <input style="width:60px" type="number" id="quantity_{{ order_item.item.pk }}" name="quantity_{{ order_item.item.pk }}" min="1" value="1">
+            </td>
+            <!--
+
+            <td>{{ order_item.item.price }}</td>
+
+
+
+            {% if order_item.item.discount_price %}
+                ${{ order_item.get_total_discount_item_price }}
+                <span class="badge badge-primary">Saving ${{ order_item.get_amount_saved }}</span>
+            {% else %}
+                ${{ order_item.get_total_item_price }}
+            {% endif %}
+
+            -->
+            <td>
+            <a style='color: red;' href="{% url 'core:remove-from-cart' order_item.item.slug %}">
+                <i class="fas fa-trash"></i>
+            </a>
+            </td>
+        </tr>
+        {% endfor %}
+         <tr>
+            <td colspan="5">
+            <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#teklif_al" aria-expanded="false" aria-controls="teklif_al">
+              Teklif Al
+            </a>
+            <a class='btn btn-warning btn-sm' href='/'>Ürün Eklemeye Devam Et</a>
+            </td>
+        </tr>
+
+        {% else %}
+        <tr>
+            <td colspan='5'>Sepetiniz Boş</td>
+        </tr>
+        <tr>
+            <td colspan="5">
+            <a class='btn btn-primary float-right' href='/'>Ürün Eklemeye Devam Et</a>
+            </td>
+        </tr>
+        {% endif %}
+
+
+
+
+        <!--{% if object.coupon %}
+        <tr>
+            <td colspan="4"><b>Coupon</b></td>
+            <td><b>-${{ object.coupon.amount }}</b></td>
+        </tr>
+        {% endif %}-->
+        <!--{% if object.get_total %}
+        <tr>
+            <td colspan="4"><b>Order Total</b></td>
+            <td><b>${{ object.get_total }}</b></td>
+        </tr>
+        <tr>
+            <td colspan="5">
+            <a class='btn btn-warning float-right ml-2' href='/checkout/'>Proceed to checkout</a>
+            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
+            </td>
+        </tr>
+        {% endif %}-->
+        </tbody>
+    </table>
+
+          <div class="collapse" id="teklif_al" style="max-width:400px">
+
+          <div class="md-form mb-2">
+              <i class="fas fa-user prefix grey-text form-icon"></i>
+              <input type="text" id="form34" name="name" class="form-control mb-4 validate" value="" required>
+              <label data-error="isim giriniz" data-success="başarılı" for="form34">İsim Soyisim</label>
+            </div>
+
+            <div class="md-form mb-2">
+              <i class="fas fa-envelope prefix grey-text form-icon"></i>
+              <input type="email" name="mail" id="form29" class="form-control validate" value="" required>
+              <label data-error="mail giriniz" data-success="başarılı" for="form29">Mail Adresi</label>
+            </div>
+
+            <div class="md-form mb-2">
+              <i class="fas fa-phone prefix grey-text form-icon"></i>
+              <input type="tel" name="phone" id="form20" class="form-control validate" value=""required
+               pattern="[0-9]{10,11}">
+              <label data-error="telefon giriniz" data-success="başarılı" for="form20">Telefon Numarası</label>
+            </div>
+              <button type="submit" value="Submit" class="btn btn-success">Tamamla</button>
+          </div>
+          </div>
+
+    </form>
+
+    </div>
+
+    </div>
+
+
+
+  </main>
+
+{% endblock content %}
