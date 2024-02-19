@@ -16,12 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls.static import static
-from django.conf import settings
+from .views import create_user, user_logout, UserListView, UserProfileCreateView, UserProfileUpdateView
+from django.contrib.auth.views import LoginView
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path('accounts/', include('allauth.urls')),
-    path('core/', include('core.urls', namespace='core')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('login/', LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', user_logout, name='logout'),
+    path("user-create/", create_user, name="user-create"),
+    path("users/", UserListView.as_view(), name="users"),
+    path("user-edit/<pk>/", UserProfileUpdateView.as_view(), name="user-edit"),
+]
 
+app_name = "core"
