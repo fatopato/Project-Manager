@@ -46,8 +46,9 @@ class MemberRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        instance.groups.add(Group.objects.get(name=ANALYST))
+    pass
+    # if created:
+    #     instance.groups.add(Group.objects.get(name=ANALYST))
 
 
 @user_passes_test(lambda u: u.is_superuser or is_project_manager(u))
